@@ -31,7 +31,6 @@ export class UserController {
         address
       }: Omit<IUser, "id"> = req.body;
 
-      // 🔐 Hash the password and log it
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 

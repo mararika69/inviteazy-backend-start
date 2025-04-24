@@ -15,7 +15,6 @@ const eventSchema = new Schema(
   }
 );
 
-// Add virtual 'id' field
 eventSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });

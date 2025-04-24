@@ -18,7 +18,7 @@ const userSchema: Schema = new Schema(
     profile_picture: { type: String, required: false },
     address: { type: String, required: false },
   },
-  { timestamps: true } // createdAt and updatedAt will be auto-managed
+  { timestamps: true }
 );
 
 export const UserModel = mongoose.model<IUser>("User", userSchema);

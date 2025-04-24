@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
-// Updated user schema to match your frontend POST body
 const userSchema = z.object({
   full_name: z.string().min(3, "Full name must be at least 3 characters"),
 
