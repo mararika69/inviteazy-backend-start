@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { logger } from "../services/loggerService";
-import { sanitizeRequestData } from "../utils/sanitizeRequestData";
+import { maskSensitiveData } from "../utils/sensitiveData";
 
 export function loggingMiddleware(
   req: Request,
@@ -13,7 +13,8 @@ export function loggingMiddleware(
     method: req.method,
     url: req.url,
     headers: req.headers,
-    body: req.body,
+    // body: req.body,
+    body: maskSensitiveData(req.body),
   };
   logger.info("Request received", requestLog);
 
