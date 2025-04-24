@@ -1,29 +1,32 @@
-import bcrypt from "bcrypt";
-
 import { UserModel } from "../../models/userModel";
-import {
-  IUser,
-  IUserRepository,
-  IUserWithoutPassword,
-} from "../../interfaces/userInterface";
+import { IUser, IUserRepository, IUserWithoutPassword } from "../../interfaces/userInterface";
 
-export class MongoUserRepository implements IUserRepository {
+export class UserRepository implements IUserRepository {
   async findAll(): Promise<IUserWithoutPassword[]> {
     const result = await UserModel.find();
-    return result.map(({ id, name, email, role }) => ({
+    return result.map(({ id, full_name, email, phone_number, profile_picture, address }) => ({
       id,
-      name,
+      full_name,
       email,
-      role,
+      phone_number,
+      profile_picture,
+      address,
     }));
   }
 
-  async findById(userId: string): Promise<IUserWithoutPassword | null> {
-    const result = await UserModel.findById(userId);
+  async findById(id: string): Promise<IUserWithoutPassword | null> {
+    const result = await UserModel.findById(id);
     if (!result) return null;
 
-    const { id, name, email, role }: IUserWithoutPassword = result;
-    return { id, name, email, role };
+    const { full_name, email, phone_number, profile_picture, address } = result;
+    return {
+      id: result.id,
+      full_name,
+      email,
+      phone_number,
+      profile_picture,
+      address,
+    };
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
@@ -31,15 +34,16 @@ export class MongoUserRepository implements IUserRepository {
   }
 
   async create(user: Omit<IUser, "id">): Promise<IUserWithoutPassword> {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    const newUser = new UserModel({
-      name: user.name,
-      email: user.email,
-      password: hashedPassword,
-      role: user.role,
-    });
-    await newUser.save();
-    const { id, name, email, role }: IUserWithoutPassword = newUser;
-    return { id, name, email, role };
+    const newUser = await UserModel.create(user);
+
+    const { full_name, email, phone_number, profile_picture, address } = newUser;
+    return {
+      id: newUser.id,
+      full_name,
+      email,
+      phone_number,
+      profile_picture,
+      address,
+    };
   }
 }

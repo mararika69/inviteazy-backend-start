@@ -1,20 +1,24 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  role: "admin" | "public" | "tourist";
+  phone_number?: string;
+  profile_picture?: string;
+  address?: string;
 }
 
 const userSchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
+    full_name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, required: true },
+    phone_number: { type: String, required: false },
+    profile_picture: { type: String, required: false },
+    address: { type: String, required: false },
   },
-  { timestamps: true }
+  { timestamps: true } // createdAt and updatedAt will be auto-managed
 );
 
 export const UserModel = mongoose.model<IUser>("User", userSchema);

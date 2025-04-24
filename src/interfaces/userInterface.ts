@@ -1,9 +1,11 @@
 export interface IUser {
   id?: string;
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  role: "admin" | "public" | "tourist";
+  phone_number?: string;
+  profile_picture?: string;
+  address?: string;
 }
 
 export interface IUserWithoutPassword extends Omit<IUser, "password"> {}
